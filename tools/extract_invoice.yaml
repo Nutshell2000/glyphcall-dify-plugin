@@ -1,0 +1,50 @@
+identity:
+  name: "extract_invoice"
+  author: "glyphcall"
+  label:
+    en_US: "Extract invoice data"
+description:
+  human:
+    en_US: "Read an invoice or receipt (PDF, Word, Excel, scan or photo) into JSON: supplier, customer, VAT numbers, invoice number, dates, currency, subtotal, tax, total, IBAN, payment reference and every line item. No template per supplier. Optionally checks the supplier's EU VAT number in VIES."
+  llm: "Extracts structured data from one invoice or receipt file (PDF, DOCX, XLSX, scanned PDF, PNG, JPEG, WebP) or from a public URL of the file. Returns JSON with supplier_name, supplier_vat_number, supplier_address, customer_name, customer_vat_number, invoice_number, invoice_date, due_date, currency, subtotal, tax_amount, total, iban, payment_reference and line_items (description, quantity, unit_price, amount). A value the document does not state is null and listed under missing; nothing is guessed. Set check_vat to also validate the supplier's EU VAT number against VIES."
+parameters:
+  - name: "file"
+    type: file
+    required: false
+    label:
+      en_US: "Invoice file"
+    human_description:
+      en_US: "The invoice or receipt: PDF, Word, Excel, a scan or a photo. Up to 10 MB (images 3 MB)."
+    llm_description: "The invoice or receipt file to read."
+    form: llm
+  - name: "url"
+    type: string
+    required: false
+    label:
+      en_US: "File URL"
+    human_description:
+      en_US: "Instead of a file: the public http(s) URL of the invoice."
+    llm_description: "Public http(s) URL of the invoice file, used when no file is given."
+    form: llm
+  - name: "check_vat"
+    type: boolean
+    required: false
+    default: false
+    label:
+      en_US: "Check the supplier's EU VAT number"
+    human_description:
+      en_US: "Also look the supplier's VAT number up in the EU's VIES register (a second call, $0.01)."
+    llm_description: "True to also validate the supplier's EU VAT number in VIES and return the registered name and address."
+    form: form
+  - name: "extra_fields"
+    type: string
+    required: false
+    label:
+      en_US: "Extra fields"
+    human_description:
+      en_US: "More fields to read, comma separated, for example: purchase_order_number, delivery_date, payment_terms"
+    llm_description: "Optional extra field names to extract, comma separated, in snake_case."
+    form: form
+extra:
+  python:
+    source: "tools/extract_invoice.py"

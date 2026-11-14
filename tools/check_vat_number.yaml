@@ -1,0 +1,22 @@
+identity:
+  name: "check_vat_number"
+  author: "glyphcall"
+  label:
+    en_US: "Check an EU VAT number"
+description:
+  human:
+    en_US: "Look an EU VAT number up in the EU's VIES register: valid or not, and the registered name and address when the country shares them."
+  llm: "Validates one EU VAT number (with its two-letter country prefix, such as DE811907980 or SE556703748501) against the EU VIES register and returns whether it is valid plus the registered company name and address when the member state provides them."
+parameters:
+  - name: "vat_number"
+    type: string
+    required: true
+    label:
+      en_US: "VAT number"
+    human_description:
+      en_US: "With the two-letter country prefix, for example SE556703748501"
+    llm_description: "The EU VAT number including its two-letter country prefix."
+    form: llm
+extra:
+  python:
+    source: "tools/check_vat_number.py"

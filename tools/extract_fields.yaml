@@ -1,0 +1,40 @@
+identity:
+  name: "extract_fields"
+  author: "glyphcall"
+  label:
+    en_US: "Extract fields from a document"
+description:
+  human:
+    en_US: "Name the fields you want from any document (contract, purchase order, delivery note, form, report) and get them back as JSON. Rows work too: line_items[description,quantity,amount]. Reads PDF, Word, Excel, PowerPoint, scans and photos."
+  llm: "Extracts the named fields from one document file (PDF, DOCX, XLSX, PPTX, scanned PDF, PNG, JPEG, WebP) or a public URL of it, and returns them as one JSON object under data. Give 1 to 30 snake_case field names separated by commas. For repeating rows give the row keys in brackets, for example line_items[description,quantity,amount]. A field the document does not state is null and listed under missing."
+parameters:
+  - name: "file"
+    type: file
+    required: false
+    label:
+      en_US: "Document"
+    human_description:
+      en_US: "The document: PDF, Word, Excel, PowerPoint, a scan or a photo. Up to 10 MB (images 3 MB)."
+    llm_description: "The document file to read."
+    form: llm
+  - name: "url"
+    type: string
+    required: false
+    label:
+      en_US: "File URL"
+    human_description:
+      en_US: "Instead of a file: the public http(s) URL of the document."
+    llm_description: "Public http(s) URL of the document, used when no file is given."
+    form: llm
+  - name: "fields"
+    type: string
+    required: true
+    label:
+      en_US: "Fields"
+    human_description:
+      en_US: "Field names, comma separated (1-30). For rows: line_items[description,quantity,amount]"
+    llm_description: "Comma-separated snake_case field names to extract (1-30). For rows give the row keys in brackets: line_items[description,quantity,amount]."
+    form: llm
+extra:
+  python:
+    source: "tools/extract_fields.py"

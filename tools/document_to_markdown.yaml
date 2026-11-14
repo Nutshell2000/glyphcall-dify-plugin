@@ -1,0 +1,58 @@
+identity:
+  name: "document_to_markdown"
+  author: "glyphcall"
+  label:
+    en_US: "Document to Markdown"
+description:
+  human:
+    en_US: "Convert a document to Markdown or plain text: Word with headings, lists and tables, Excel sheet by sheet, PowerPoint slide by slide, the text of a PDF, and scanned PDFs or photos by OCR."
+  llm: "Converts one document file (PDF, DOCX, XLSX, PPTX, scanned PDF, PNG, JPEG, WebP) or a public URL of it to Markdown (default) or plain text. Use it to read an attachment into an LLM, a knowledge base or a later step."
+parameters:
+  - name: "file"
+    type: file
+    required: false
+    label:
+      en_US: "Document"
+    human_description:
+      en_US: "The document: PDF, Word, Excel, PowerPoint, a scan or a photo. Up to 10 MB (images 3 MB)."
+    llm_description: "The document file to convert."
+    form: llm
+  - name: "url"
+    type: string
+    required: false
+    label:
+      en_US: "File URL"
+    human_description:
+      en_US: "Instead of a file: the public http(s) URL of the document."
+    llm_description: "Public http(s) URL of the document, used when no file is given."
+    form: llm
+  - name: "format"
+    type: select
+    required: false
+    default: "markdown"
+    label:
+      en_US: "Output"
+    human_description:
+      en_US: "Markdown keeps headings, lists and tables; text is plain."
+    llm_description: "markdown or text"
+    options:
+      - value: "markdown"
+        label:
+          en_US: "Markdown"
+      - value: "text"
+        label:
+          en_US: "Plain text"
+    form: form
+  - name: "max_chars"
+    type: number
+    required: false
+    default: 50000
+    label:
+      en_US: "Maximum characters"
+    human_description:
+      en_US: "Longest text to return (1,000 to 200,000)."
+    llm_description: "Maximum characters of text to return, 1000 to 200000."
+    form: form
+extra:
+  python:
+    source: "tools/document_to_markdown.py"

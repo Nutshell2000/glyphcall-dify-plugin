@@ -1,0 +1,31 @@
+identity:
+  author: "glyphcall"
+  name: "glyphcall"
+  label:
+    en_US: "Glyphcall Documents"
+  description:
+    en_US: "Invoices, receipts and documents to JSON fields or Markdown, with an optional EU VAT number check."
+  icon: "icon.svg"
+  tags:
+    - "productivity"
+    - "utilities"
+    - "finance"
+credentials_for_provider:
+  api_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: "API key"
+    placeholder:
+      en_US: "adt_..."
+    help:
+      en_US: "Get a key: credits from $1 or a plan from $9 a month"
+    url: "https://tools.funwords.eu/credits"
+tools:
+  - "tools/extract_invoice.yaml"
+  - "tools/extract_fields.yaml"
+  - "tools/document_to_markdown.yaml"
+  - "tools/check_vat_number.yaml"
+extra:
+  python:
+    source: "provider/glyphcall.py"
