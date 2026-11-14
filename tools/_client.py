@@ -104,7 +104,9 @@ def call(api_key: str, path: str, params: dict[str, Any], file: Any = None, url:
     try:
         if file is not None:
             blob, mime = file_parts(file)
-            response = httpx.post(f"{BASE_URL}{path}", params=query, content=blob, headers={**headers, "Content-Type": mime}, timeout=TIMEOUT)
+            name = str(getattr(file, "filename", None) or "document")
+            # A multipart form with a `file` part: the one upload shape the API takes for every file type.
+            response = httpx.post(f"{BASE_URL}{path}", params=query, files={"file": (name, blob, mime)}, headers=headers, timeout=TIMEOUT)
         else:
             address = (url or "").strip()
             if path.startswith("/document/"):
