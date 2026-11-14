@@ -19,6 +19,7 @@ MIME_BY_EXTENSION = {
     "jpg": "image/jpeg",
     "jpeg": "image/jpeg",
     "webp": "image/webp",
+    "xml": "application/xml",
 }
 
 
@@ -30,7 +31,7 @@ def _headers(api_key: str) -> dict[str, str]:
     key = (api_key or "").strip()
     if not key:
         raise ApiError(f"No API key is set. Get one at {CREDITS_URL}")
-    return {"Authorization": f"Bearer {key}", "Accept": "application/json", "User-Agent": "glyphcall-dify-plugin/0.1.0"}
+    return {"Authorization": f"Bearer {key}", "Accept": "application/json", "User-Agent": "glyphcall-dify-plugin/0.2.0"}
 
 
 def _message(response: httpx.Response) -> str:
@@ -109,11 +110,22 @@ def call(api_key: str, path: str, params: dict[str, Any], file: Any = None, url:
             response = httpx.post(f"{BASE_URL}{path}", params=query, files={"file": (name, blob, mime)}, headers=headers, timeout=TIMEOUT)
         else:
             address = (url or "").strip()
-            if path.startswith("/document/"):
+            if path.startswith(("/document/", "/einvoice/")):
                 if not address.lower().startswith(("http://", "https://")):
                     raise ApiError("Give a file, or the public http(s) URL of one.")
                 query["url"] = address
             response = httpx.get(f"{BASE_URL}{path}", params=query, headers=headers, timeout=TIMEOUT)
+    except httpx.HTTPError as e:
+        raise ApiError(f"Could not reach the API: {type(e).__name__}. Nothing was charged.") from e
+    return _checked(response)
+
+
+def post_json(api_key: str, path: str, body: dict[str, Any], params: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Runs one tool whose input is too large for a URL (an invoice, an XML text): the fields go in a JSON body."""
+    headers = _headers(api_key)
+    query = {k: v for k, v in (params or {}).items() if v not in (None, "")}
+    try:
+        response = httpx.post(f"{BASE_URL}{path}", params=query, json=body, headers=headers, timeout=TIMEOUT)
     except httpx.HTTPError as e:
         raise ApiError(f"Could not reach the API: {type(e).__name__}. Nothing was charged.") from e
     return _checked(response)

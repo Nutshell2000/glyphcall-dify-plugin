@@ -1,11 +1,11 @@
-version: "0.1.0"
+version: "0.2.0"
 type: "plugin"
 author: "glyphcall"
 name: "documents"
 label:
   en_US: "Glyphcall Documents: invoice and document extraction"
 description:
-  en_US: "Read invoices, receipts and any document into JSON fields you name, line items included, and convert PDF, Word, Excel, PowerPoint, scans and photos to Markdown. Optional EU VAT number check of the supplier. One API key; a file that cannot be read is never charged."
+  en_US: "Read invoices, receipts and any document into JSON fields you name, line items included, and convert PDF, Word, Excel, PowerPoint, scans and photos to Markdown. Optional EU VAT number check of the supplier. Create, validate and read XRechnung, ZUGFeRD and Factur-X e-invoices. One API key; a file that cannot be read is never charged."
 icon: "icon.svg"
 resource:
   memory: 268435456

@@ -5,6 +5,7 @@ This plugin sends data to one service only: the Glyphcall document API at `https
 ## What is sent
 
 - The file you give a tool (or the public URL of a file), and the field names you ask for.
+- For the e-invoice tools: the e-invoice file or XML text, or the invoice data you want written as an e-invoice.
 - For the VAT check: the VAT number. The API forwards that number to the European Commission's VIES service to get the answer.
 - Your API key, in the `Authorization` header over HTTPS. The key is never put in a URL.
 
@@ -12,6 +13,7 @@ This plugin sends data to one service only: the Glyphcall document API at `https
 
 - A file sent in a request is held in memory for that request only. It is not stored, cached or logged by the API.
 - The text of a document is read by an AI model hosted on Cloudflare Workers AI to find the fields. It is not used to train models.
+- The e-invoice tools (create, validate, to JSON) are plain computation: no AI model reads the invoice.
 - The API keeps a count of calls per key for billing, and standard request logs without file contents.
 - The plugin itself stores nothing and writes no logs with your data. Dify stores your API key as an encrypted credential.
 

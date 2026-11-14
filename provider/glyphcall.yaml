@@ -4,7 +4,7 @@ identity:
   label:
     en_US: "Glyphcall Documents"
   description:
-    en_US: "Invoices, receipts and documents to JSON fields or Markdown, with an optional EU VAT number check."
+    en_US: "Invoices, receipts and documents to JSON fields or Markdown, an EU VAT number check, and XRechnung, ZUGFeRD and Factur-X e-invoices: create, validate, read."
   icon: "icon.svg"
   tags:
     - "productivity"
@@ -26,6 +26,9 @@ tools:
   - "tools/extract_fields.yaml"
   - "tools/document_to_markdown.yaml"
   - "tools/check_vat_number.yaml"
+  - "tools/create_einvoice.yaml"
+  - "tools/validate_einvoice.yaml"
+  - "tools/einvoice_to_json.yaml"
 extra:
   python:
     source: "provider/glyphcall.py"

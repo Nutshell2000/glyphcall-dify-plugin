@@ -8,7 +8,7 @@ from typing import Any
 from dify_plugin import Tool
 from dify_plugin.entities.tool import ToolInvokeMessage
 
-from tools._client import ApiError, call, one_file
+from tools._client import ApiError, call, one_file, post_json
 
 INVOICE_FIELDS = (
     "supplier_name,supplier_vat_number,supplier_address,customer_name,customer_vat_number,"
@@ -52,3 +52,20 @@ def answer(tool: Tool, result: dict[str, Any], text: str | None = None) -> Gener
 
 def refuse(e: ApiError) -> Exception:
     return Exception(str(e))
+
+
+def einvoice_call(tool: Tool, path: str, params: dict[str, Any], tool_parameters: dict[str, Any]) -> dict[str, Any]:
+    """An e-invoice as a file (XML, or the PDF with the XML inside), as XML text, or as a public URL."""
+    key = tool.runtime.credentials.get("api_key", "")
+    file = one_file(tool_parameters.get("file"))
+    if file is not None:
+        return call(key, path, params, file=file)
+    xml = str(tool_parameters.get("xml") or "").strip()
+    if xml:
+        if not xml.startswith("<"):
+            raise ApiError("The XML text does not start with '<'. Give the e-invoice XML, a file, or a URL.")
+        return post_json(key, path, {"xml": xml}, params)
+    url = str(tool_parameters.get("url") or "").strip()
+    if not url:
+        raise ApiError("Give the e-invoice as a file, as XML text, or as the public http(s) URL of one.")
+    return call(key, path, params, url=url)

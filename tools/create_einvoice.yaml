@@ -1,0 +1,45 @@
+identity:
+  name: "create_einvoice"
+  author: "glyphcall"
+  label:
+    en_US: "Create an e-invoice (XRechnung, ZUGFeRD, Factur-X)"
+description:
+  human:
+    en_US: "Turn invoice data as JSON into XRechnung or ZUGFeRD / Factur-X XML. Line totals, the VAT breakdown and the totals are computed and checked first; data that breaks a rule is refused with the rule numbers and not charged."
+  llm: "Creates an EU e-invoice XML from invoice data given as a JSON object: number, issueDate, dueDate, buyerReference, seller and buyer (name, vatId, street, postCode, city, country, contactName, phone, email), lines (name, quantity, unit, unitPrice, vatRate) and payment (iban, bic, terms). Output formats: xrechnung (XRechnung 3.0, CII), xrechnung-ubl, zugferd (the factur-x.xml, EN 16931 profile) or ubl. Returns the XML as text and as a file. It writes the XML only, not the PDF, and sends it nowhere."
+parameters:
+  - name: "invoice"
+    type: string
+    required: true
+    label:
+      en_US: "Invoice (JSON)"
+    human_description:
+      en_US: "The invoice as a JSON object: number, issueDate, seller, buyer, lines and payment. The output of the invoice extraction tool can be passed as it is."
+    llm_description: "The invoice as a JSON object in a string, with number, issueDate, dueDate, buyerReference, seller, buyer, lines and payment. The flat fields of extract_invoice (invoice_number, supplier_name, line_items) are accepted too."
+    form: llm
+  - name: "format"
+    type: select
+    required: false
+    default: "xrechnung"
+    label:
+      en_US: "Format"
+    human_description:
+      en_US: "XRechnung for German business and public-sector invoices; ZUGFeRD / Factur-X XML to put inside a PDF."
+    llm_description: "xrechnung, xrechnung-ubl, zugferd or ubl"
+    options:
+      - value: "xrechnung"
+        label:
+          en_US: "XRechnung 3.0 (CII)"
+      - value: "xrechnung-ubl"
+        label:
+          en_US: "XRechnung 3.0 (UBL)"
+      - value: "zugferd"
+        label:
+          en_US: "ZUGFeRD / Factur-X XML"
+      - value: "ubl"
+        label:
+          en_US: "EN 16931 (UBL)"
+    form: form
+extra:
+  python:
+    source: "tools/create_einvoice.py"

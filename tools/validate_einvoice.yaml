@@ -1,0 +1,60 @@
+identity:
+  name: "validate_einvoice"
+  author: "glyphcall"
+  label:
+    en_US: "Validate an e-invoice (XRechnung, ZUGFeRD, Factur-X)"
+description:
+  human:
+    en_US: "Check an XRechnung, ZUGFeRD, Factur-X or other EN 16931 e-invoice against business rules. Returns valid or not, and every broken rule with its number, the field, a plain message and the fix."
+  llm: "Validates one EU e-invoice (XRechnung, ZUGFeRD / Factur-X XML or the PDF that embeds it, Peppol or other EN 16931 UBL or CII) against a subset of the EN 16931 and XRechnung 3.0 business rules. Returns valid true or false, errors and warnings with rule numbers such as BR-CO-15 or BR-DE-15, a message and a fix, and the invoice totals. Give a file, XML text or a public URL."
+parameters:
+  - name: "file"
+    type: file
+    required: false
+    label:
+      en_US: "E-invoice file"
+    human_description:
+      en_US: "The e-invoice: an XML file, or a ZUGFeRD / Factur-X PDF with the XML inside. Up to 5 MB."
+    llm_description: "The e-invoice file: XML, or a ZUGFeRD / Factur-X PDF."
+    form: llm
+  - name: "xml"
+    type: string
+    required: false
+    label:
+      en_US: "XML text"
+    human_description:
+      en_US: "Instead of a file: the e-invoice XML as text."
+    llm_description: "The e-invoice XML as text (UN/CEFACT CII or UBL), used when no file is given."
+    form: llm
+  - name: "url"
+    type: string
+    required: false
+    label:
+      en_US: "File URL"
+    human_description:
+      en_US: "Instead of a file: the public http(s) URL of the e-invoice."
+    llm_description: "Public http(s) URL of the e-invoice, used when no file and no XML text is given."
+    form: llm
+  - name: "profile"
+    type: select
+    required: false
+    default: "auto"
+    label:
+      en_US: "Rule set"
+    human_description:
+      en_US: "Automatic runs the German XRechnung rules when the file names XRechnung."
+    llm_description: "auto, xrechnung or en16931"
+    options:
+      - value: "auto"
+        label:
+          en_US: "Automatic"
+      - value: "xrechnung"
+        label:
+          en_US: "XRechnung (European plus German rules)"
+      - value: "en16931"
+        label:
+          en_US: "EN 16931 only"
+    form: form
+extra:
+  python:
+    source: "tools/validate_einvoice.py"
