@@ -12,7 +12,7 @@ Glyphcall is the document API of SpellzCode. This plugin is a thin client for it
 | **Extract fields from a document** | The fields you name, as one JSON object. Rows work too: `line_items[description,quantity,amount]`. For contracts, purchase orders, delivery notes, forms, reports. |
 | **Document to Markdown** | Word with headings, lists and tables, Excel sheet by sheet, PowerPoint slide by slide, the text of a PDF, scanned PDFs and photos by OCR. |
 | **Check an EU VAT number** | Valid or not in the EU's VIES register, with the registered name and address when the country shares them. |
-| **Create an e-invoice** | XRechnung 3.0 (CII or UBL) or the ZUGFeRD / Factur-X XML from invoice data as JSON, as text and as a file. Totals and the VAT breakdown are computed and checked first; data that breaks a rule is refused with the rule numbers. |
+| **Create an e-invoice** | XRechnung 3.0 XML (CII or UBL) or a ZUGFeRD / Factur-X PDF with the XML inside, from invoice data as JSON, as a file. Totals and the VAT breakdown are computed and checked first; data that breaks a rule is refused with the rule numbers. |
 | **Validate an e-invoice** | Valid or not, and every broken business rule with its number (`BR-DE-15`, `BR-CO-15`), the field, the figures from the file and the fix. |
 | **E-invoice to JSON** | An XRechnung, ZUGFeRD, Factur-X or other EN 16931 invoice as JSON: parties, lines, VAT breakdown, totals, bank account. Exact values from the XML, no AI. |
 
@@ -79,7 +79,7 @@ So the $9 plan reads about 500 invoices a month.
 - Extraction reads the first 24,000 characters of a file, and at most three pages of a scanned PDF.
 - Old `.doc`, `.xls` and `.ppt` files and password-protected files are refused; save them in the current format first.
 - Not tested on a self-hosted Dify behind a firewall that blocks outbound HTTPS.
-- E-invoices: **Create** writes the XML only, not the ZUGFeRD PDF, and sends the invoice nowhere. Allowances and charges, attachments, card and direct-debit payments are not written. **Validate** runs a subset of the EN 16931 and XRechnung 3.0 business rules; it is not the official KoSIT validator and not tax advice.
+- E-invoices: **Create** sends the invoice nowhere; its ZUGFeRD PDF has one plain layout (no logo) and is built to PDF/A-3b but not certified by a PDF/A validator. Allowances and charges, attachments, card and direct-debit payments are not written. **Validate** runs a subset of the EN 16931 and XRechnung 3.0 business rules; it is not the official KoSIT validator and not tax advice.
 
 ## Privacy
 

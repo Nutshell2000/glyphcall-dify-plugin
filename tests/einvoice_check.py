@@ -121,6 +121,10 @@ def main() -> int:
     except Exception as e:  # noqa: BLE001
         expect(False, f"create from a read invoice: {e}")
 
+    hybrid = run(CreateEinvoiceTool, invoice=json.dumps(INVOICE), format="zugferd-pdf")
+    expect(hybrid["blob"]["mime_type"] == "application/pdf" and hybrid["blob"]["filename"] == "RE-2026-0042.pdf" and hybrid["blob"]["bytes"] > 30000, f"create: ZUGFeRD PDF as a file ({hybrid['blob']})")
+    expect("pdfBase64" not in hybrid["json"], "create: the PDF is not repeated as base64 in the JSON")
+
     try:
         run(CreateEinvoiceTool, invoice=json.dumps({"number": "X", "seller": {"name": "A"}, "lines": []}), format="xrechnung")
         expect(False, "create: broken data should be refused")

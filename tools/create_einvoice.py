@@ -1,3 +1,4 @@
+import base64
 import json
 from collections.abc import Generator
 from typing import Any
@@ -8,7 +9,7 @@ from dify_plugin.entities.tool import ToolInvokeMessage
 from tools._client import ApiError, post_json
 from tools._run import refuse
 
-FORMATS = ("xrechnung", "xrechnung-ubl", "zugferd", "ubl")
+FORMATS = ("xrechnung", "xrechnung-ubl", "zugferd-pdf", "zugferd", "ubl")
 
 # The names extract_invoice returns, mapped to the names the e-invoice writer reads.
 SUPPLIER_TO_SELLER = {
@@ -53,8 +54,13 @@ class CreateEinvoiceTool(Tool):
         except ApiError as e:
             raise refuse(e) from e
         xml = result.get("xml") if isinstance(result.get("xml"), str) else ""
+        pdf = result.pop("pdfBase64", None)
         yield self.create_json_message(result)
         yield self.create_text_message(xml)
-        if xml:
+        if isinstance(pdf, str) and pdf:
+            # The ZUGFeRD / Factur-X PDF: handed over as a file, never as base64 text.
+            name = str(result.get("filename") or "invoice.pdf")
+            yield self.create_blob_message(blob=base64.b64decode(pdf), meta={"mime_type": "application/pdf", "filename": name})
+        elif xml:
             name = str(result.get("filename") or "invoice.xml")
             yield self.create_blob_message(blob=xml.encode("utf-8"), meta={"mime_type": "application/xml", "filename": name})
