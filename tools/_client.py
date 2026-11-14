@@ -30,7 +30,7 @@ class ApiError(Exception):
 def _headers(api_key: str) -> dict[str, str]:
     key = (api_key or "").strip()
     if not key:
-        raise ApiError(f"No API key is set. Get one at {CREDITS_URL}")
+        raise ApiError(f"No API key is set. Get a free one at {BASE_URL}/keys/free")
     return {"Authorization": f"Bearer {key}", "Accept": "application/json", "User-Agent": "glyphcall-dify-plugin/0.2.0"}
 
 
@@ -49,7 +49,7 @@ def _message(response: httpx.Response) -> str:
 
 def _checked(response: httpx.Response) -> dict[str, Any]:
     if response.status_code == 401:
-        raise ApiError(f"The API key was not accepted. Check it, or get one at {CREDITS_URL}")
+        raise ApiError(f"The API key was not accepted. Check it, or get a free one at {BASE_URL}/keys/free")
     if response.status_code == 402:
         raise ApiError(f"This key has no credits left for this call, or it is not a valid key. Add credits or a plan at {CREDITS_URL}")
     if response.status_code == 429:

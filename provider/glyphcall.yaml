@@ -19,8 +19,8 @@ credentials_for_provider:
     placeholder:
       en_US: "adt_..."
     help:
-      en_US: "Get a key: credits from $1 or a plan from $9 a month"
-    url: "https://tools.funwords.eu/credits"
+      en_US: "Get a free key (100 calls a month), or credits from $1"
+    url: "https://tools.funwords.eu/keys/free"
 tools:
   - "tools/extract_invoice.yaml"
   - "tools/extract_fields.yaml"

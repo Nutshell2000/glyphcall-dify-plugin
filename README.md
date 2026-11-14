@@ -22,7 +22,7 @@ E-invoices: an XML file, XML text, or a ZUGFeRD / Factur-X PDF with the XML insi
 
 ## Setup
 
-1. Get an API key at https://tools.funwords.eu/credits (pay once from $1, or a plan from $9 a month; credits do not expire).
+1. Get a free API key at https://tools.funwords.eu/keys/free: leave an e-mail address, open the link, copy the key. It makes 100 calls a month. More calls: credits from $1 or a plan from $9 a month at https://tools.funwords.eu/credits, added to the same key.
 2. In Dify open **Plugins**, install **Glyphcall Documents**, choose **Authorize** and paste the key.
 3. Add a tool to a workflow or an agent.
 
