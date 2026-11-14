@@ -1,3 +1,4 @@
+import re
 from collections.abc import Generator
 from typing import Any
 
@@ -31,7 +32,8 @@ class ExtractInvoiceTool(Tool):
 
     def _vat_check(self, number: Any) -> dict[str, Any]:
         """A second, separately priced call. A failed check is reported, never raised: the invoice was read."""
-        vat = "".join(str(number or "").split()).upper()
+        # Invoices print the number with spaces, dots and a trailing label ("NL810433941B01BTW").
+        vat = re.sub(r"(BTW|VAT|TVA|MWST|UST|IVA)$", "", re.sub(r"[^A-Z0-9]", "", str(number or "").upper()))
         if not vat:
             return {"checked": False, "reason": "the invoice states no supplier VAT number"}
         try:
